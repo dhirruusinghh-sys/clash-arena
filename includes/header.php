@@ -124,7 +124,7 @@ try {
                                 <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
                             <?php endif; ?>
                         </button>
-                        <div class="dropdown-menu dropdown-menu-end border-0 shadow-lg p-3" style="width: 320px !important; min-width: 320px !important; background: var(--bg-secondary) !important; border: 1px solid var(--card-border) !important; border-radius: 12px; backdrop-filter: blur(15px); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25) !important;">
+                        <div class="dropdown-menu dropdown-menu-end border-0 shadow-lg p-3" style="width: 320px !important; max-width: 85vw !important; background: var(--bg-secondary) !important; border: 1px solid var(--card-border) !important; border-radius: 12px; backdrop-filter: blur(15px); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25) !important;">
                             <h6 class="dropdown-header fw-bold px-0 mb-3 font-display border-bottom pb-2" style="font-size: 0.95rem; color: var(--text-primary) !important; border-color: rgba(123, 97, 255, 0.15) !important; letter-spacing: 0.05em; text-transform: uppercase;">Notifications</h6>
                             <?php if (!empty($notifications)): ?>
                                 <?php foreach ($notifications as $n): ?>
