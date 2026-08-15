@@ -1,6 +1,8 @@
 -- Database Initializer for Clash Arena – E-Sports Tournament Platform
 -- Database: final_db
 
+CREATE DATABASE IF NOT EXISTS `final_db` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE `final_db`;
 
 -- Drop existing tables in reverse order of foreign keys to avoid constraints issues
 DROP TABLE IF EXISTS `audit_logs`;

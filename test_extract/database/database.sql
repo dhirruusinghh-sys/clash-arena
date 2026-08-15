@@ -1,6 +1,8 @@
 -- Database Initializer for Clash Arena – E-Sports Tournament Platform
 -- Database: final_db
 
+CREATE DATABASE IF NOT EXISTS `final_db` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE `final_db`;
 
 -- Drop existing tables in reverse order of foreign keys to avoid constraints issues
 DROP TABLE IF EXISTS `audit_logs`;
@@ -43,7 +45,7 @@ CREATE TABLE `admins` (
     `department` VARCHAR(100) DEFAULT 'Operations',
     `level` INT DEFAULT 1,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE
+    FOREIGN KEY (`user_id`) REFERENCES `users`('id') ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 3. Create Super Admins Table
@@ -52,7 +54,7 @@ CREATE TABLE `super_admins` (
     `user_id` INT NOT NULL,
     `access_level` VARCHAR(50) DEFAULT 'All Permissions',
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE
+    FOREIGN KEY (`user_id`) REFERENCES `users`('id') ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 4. Create Roles Table
@@ -91,7 +93,7 @@ CREATE TABLE `teams` (
     `captain_id` INT NOT NULL,
     `logo_url` VARCHAR(255) DEFAULT '',
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (`captain_id`) REFERENCES `users`(`id`) ON DELETE CASCADE
+    FOREIGN KEY (`captain_id`) REFERENCES `users`('id') ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 8. Create Tournaments Table
@@ -107,8 +109,8 @@ CREATE TABLE `tournaments` (
     `entry_fee` DECIMAL(10, 2) DEFAULT 0.00,
     `winner_id` INT DEFAULT NULL,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (`game_id`) REFERENCES `games`(`id`) ON DELETE CASCADE,
-    FOREIGN KEY (`winner_id`) REFERENCES `users`(`id`) ON DELETE SET NULL
+    FOREIGN KEY (`game_id`) REFERENCES `games`('id') ON DELETE CASCADE,
+    FOREIGN KEY (`winner_id`) REFERENCES `users`('id') ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 9. Create Tournament Registrations Table
@@ -120,9 +122,9 @@ CREATE TABLE `tournament_registrations` (
     `registration_type` ENUM('solo', 'team') NOT NULL,
     `status` ENUM('pending', 'approved', 'rejected') DEFAULT 'pending',
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (`tournament_id`) REFERENCES `tournaments`(`id`) ON DELETE CASCADE,
-    FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE,
-    FOREIGN KEY (`team_id`) REFERENCES `teams`(`id`) ON DELETE SET NULL
+    FOREIGN KEY (`tournament_id`) REFERENCES `tournaments`('id') ON DELETE CASCADE,
+    FOREIGN KEY (`user_id`) REFERENCES `users`('id') ON DELETE CASCADE,
+    FOREIGN KEY (`team_id`) REFERENCES `teams`('id') ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 10. Create Team Members Table
@@ -132,8 +134,8 @@ CREATE TABLE `team_members` (
     `user_id` INT NOT NULL,
     `role` ENUM('captain', 'member') DEFAULT 'member',
     `joined_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (`team_id`) REFERENCES `teams`(`id`) ON DELETE CASCADE,
-    FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`team_id`) REFERENCES `teams`('id') ON DELETE CASCADE,
+    FOREIGN KEY (`user_id`) REFERENCES `users`('id') ON DELETE CASCADE,
     UNIQUE KEY `team_user` (`team_id`, `user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -154,11 +156,11 @@ CREATE TABLE `matches` (
     `status` ENUM('scheduled', 'live', 'completed', 'cancelled') DEFAULT 'scheduled',
     `scheduled_time` DATETIME NOT NULL,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (`tournament_id`) REFERENCES `tournaments`(`id`) ON DELETE CASCADE,
-    FOREIGN KEY (`player1_id`) REFERENCES `users`(`id`) ON DELETE SET NULL,
-    FOREIGN KEY (`player2_id`) REFERENCES `users`(`id`) ON DELETE SET NULL,
-    FOREIGN KEY (`team1_id`) REFERENCES `teams`(`id`) ON DELETE SET NULL,
-    FOREIGN KEY (`team2_id`) REFERENCES `teams`(`id`) ON DELETE SET NULL
+    FOREIGN KEY (`tournament_id`) REFERENCES `tournaments`('id') ON DELETE CASCADE,
+    FOREIGN KEY (`player1_id`) REFERENCES `users`('id') ON DELETE SET NULL,
+    FOREIGN KEY (`player2_id`) REFERENCES `users`('id') ON DELETE SET NULL,
+    FOREIGN KEY (`team1_id`) REFERENCES `teams`('id') ON DELETE SET NULL,
+    FOREIGN KEY (`team2_id`) REFERENCES `teams`('id') ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 12. Create Brackets Table
@@ -169,7 +171,7 @@ CREATE TABLE `brackets` (
     `current_round` INT DEFAULT 1,
     `bracket_type` VARCHAR(50) DEFAULT 'single_elimination',
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (`tournament_id`) REFERENCES `tournaments`(`id`) ON DELETE CASCADE
+    FOREIGN KEY (`tournament_id`) REFERENCES `tournaments`('id') ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 13. Create Leaderboard Table
@@ -185,9 +187,9 @@ CREATE TABLE `leaderboard` (
     `win_rate` DECIMAL(5, 2) DEFAULT 0.00,
     `badge` VARCHAR(100) DEFAULT 'Novice',
     `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE,
-    FOREIGN KEY (`team_id`) REFERENCES `teams`(`id`) ON DELETE CASCADE,
-    FOREIGN KEY (`game_id`) REFERENCES `games`(`id`) ON DELETE CASCADE
+    FOREIGN KEY (`user_id`) REFERENCES `users`('id') ON DELETE CASCADE,
+    FOREIGN KEY (`team_id`) REFERENCES `teams`('id') ON DELETE CASCADE,
+    FOREIGN KEY (`game_id`) REFERENCES `games`('id') ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 14. Create Rewards Table
@@ -210,7 +212,7 @@ CREATE TABLE `notifications` (
     `is_read` TINYINT(1) DEFAULT 0,
     `type` VARCHAR(50) DEFAULT 'info',
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE
+    FOREIGN KEY (`user_id`) REFERENCES `users`('id') ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 16. Create Wallets Table
@@ -220,7 +222,7 @@ CREATE TABLE `wallets` (
     `balance` DECIMAL(10, 2) DEFAULT 0.00,
     `coins` INT DEFAULT 0,
     `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE
+    FOREIGN KEY (`user_id`) REFERENCES `users`('id') ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 17. Create Transactions Table
@@ -232,7 +234,7 @@ CREATE TABLE `transactions` (
     `status` ENUM('pending', 'completed', 'failed') DEFAULT 'pending',
     `description` TEXT,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (`wallet_id`) REFERENCES `wallets`(`id`) ON DELETE CASCADE
+    FOREIGN KEY (`wallet_id`) REFERENCES `wallets`('id') ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 18. Create Announcements Table
@@ -243,7 +245,7 @@ CREATE TABLE `announcements` (
     `created_by` INT NOT NULL,
     `status` ENUM('active', 'inactive') DEFAULT 'active',
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (`created_by`) REFERENCES `users`(`id`) ON DELETE CASCADE
+    FOREIGN KEY (`created_by`) REFERENCES `users`('id') ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 19. Create Settings Table
@@ -263,7 +265,7 @@ CREATE TABLE `audit_logs` (
     `ip_address` VARCHAR(45) DEFAULT NULL,
     `details` TEXT,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE SET NULL
+    FOREIGN KEY (`user_id`) REFERENCES `users`('id') ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
