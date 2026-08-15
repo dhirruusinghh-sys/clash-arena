@@ -11,10 +11,10 @@ if ($is_localhost) {
     $username = 'root';
     $password = '';
 } else {
-    $host = 'sql203.infinityfree.com';
-    $dbname = 'if0_42295001_arena';
-    $username = 'if0_42295001';
-    $password = '2981j4in0q2ZHzC';
+    $host = 'sql102.byetcluster.com';
+    $dbname = 'if0_42663738_clash';
+    $username = 'if0_42663738';
+    $password = 'mwKYPBHrKd5L4E';
 }
 
 try {
